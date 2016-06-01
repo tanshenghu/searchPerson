@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="Author" content="TanShenghu">
+    <title>searchPerson 搜人物组件</title>
+    <link rel="stylesheet" href="http://www.tanshenghu.com/static/css/base.css">
+    <style>
+    body{font-size:12px;padding:20px;}
+
+    .items-person-trol{height:34px;position:relative;border:1px solid #d1d1d1;-webkit-border-radius:3px;border-radius:3px}
+    .items-person-trol .checked-items{float:left;display:inline;vertical-align:middle;background-color:#eff6fa;padding:3px 7px;-webkit-border-radius:3px;border-radius:3px;margin-left:5px;margin-top:3px;color:#3b72b9}
+    .items-person-trol .checked-items var{vertical-align:middle;padding-right:5px}
+    .items-person-trol .checked-items .J-del{visibility:hidden;font-size:18px;font-weight:bold;cursor:pointer}
+    .items-person-trol .checked-items:hover .J-del{visibility:visible}
+    .items-person-trol .cinput{min-width:14px;height:100%;float:left;display:inline;vertical-align:middle;position:relative}
+    .items-person-trol .cinput [type="text"]{width:100%;height:100%;line-height:34px;border:0;background-color:transparent;padding-left:4px;padding-right:4px;position:absolute;left:0;top:0;font-size:12px}
+    .items-person-trol .cinput [type="text"]:focus{-webkit-box-shadow:none;box-shadow:none}
+    .items-person-trol .cinput var{visibility:hidden;font-size:13px;font-weight:bold;padding-left:4px;padding-right:4px}
+    .items-person-trol .dropDown{display:none;position:absolute;left:-1px;top:38px;width:100%;background-color:white;border:1px solid #d1d1d1;-webkit-border-radius:3px;border-radius:3px;max-height:220px;z-index:100;background-color:white;overflow-y:auto}
+    .items-person-trol .dropDown a{display:block;height:25px;line-height:25px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;padding-left:5px;padding-right:5px;color:#666}
+    .items-person-trol .dropDown a:hover{background-color:#eff6fa}
+    </style>
+    <script src="http://a.alipayobjects.com/??seajs/seajs/2.2.0/sea.js,jquery/jquery/1.8.2/jquery.js"></script>
+    <script>
+    seajs.config({
+        paths: {
+            host: 'http://www.tanshenghu.com',
+            widget: 'http://www.tanshenghu.com/widget'
+        },
+        alias: {
+            $: 'host/static/js/$',
+            'searchPerson': 'widget/searchPerson/1.0.0/searchPerson'
+        }
+    });
+    </script>
+</head>
+<body>
+    
+    <div class="items-person-trol demo1"></div>
+    <hr>
+    <div class="items-person-trol demo2"></div>
+    <script>
+        seajs.use(['$','searchPerson'], function( $, SearchPerson ){
+            
+            new SearchPerson({
+                trigger: '.demo1',
+                url: './data.htm',
+                type: 'get',
+                alone: false,
+                remove: true,
+                params: {type:"person"},
+                field:{
+                    kw: 'keyworld',
+                    name: 'name',
+                    value: 'key'
+                },
+                renderList: function( o, data ){
+                    if( data.success ){
+                        var result = '';
+                        $.each(data.data, function(i, item){
+                            result += '<a href="javascript:;" key="'+item.id+'" data-email="'+item.email+'">'+item.name+'</a>';
+                        })
+                        return result;
+                    }
+                },
+                change: function( ){
+                    
+                    return {name:this.text(), value:this.attr('key'), email:this.data('email')};
+                    
+                },
+                changeErr: function( data, content ){
+                    // this -> 当前输入文本框
+                    alert( content );
+                }
+            })
+            
+            new SearchPerson({
+                trigger: '.demo2',
+                alone: false,
+                remove: true,
+                field: {
+                    kw: 'keyworld',
+                    name: 'name'
+                },
+                change: function( val ){
+                    
+                    
+                    
+                },
+                changeErr: function( data, content ){
+                    alert( content );
+                }
+            })
+            
+        });
+    </script>
+</body>
+</html>
